@@ -3,6 +3,7 @@ library feedback_sentry;
 import 'package:feedback/feedback.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sentry/sentry.dart';
+import 'package:uuid/uuid.dart';
 export 'package:feedback/feedback.dart';
 
 /// Extension on [FeedbackController] in order to make
@@ -54,12 +55,14 @@ OnFeedbackCallback sendToSentry({
   final realHub = hub ?? HubAdapter();
 
   return (UserFeedback feedback) async {
+    var uuid = Uuid();
     final id = await realHub.captureMessage(feedback.text, withScope: (scope) {
       scope.addAttachment(SentryAttachment.fromUint8List(
         feedback.screenshot,
         'screenshot.png',
         contentType: 'image/png',
       ));
+      scope.fingerprint = ['feedback_${uuid.v1()}'];
     });
     await realHub.captureUserFeedback(SentryUserFeedback(
       eventId: id,
@@ -83,6 +86,7 @@ OnFeedbackCallback sendToSentryWithException({
   final realHub = hub ?? HubAdapter();
 
   return (UserFeedback feedback) async {
+    var uuid = Uuid();
     final id = await realHub.captureException(
       exception,
       stackTrace: stackTrace,
@@ -92,6 +96,7 @@ OnFeedbackCallback sendToSentryWithException({
           'screenshot.png',
           contentType: 'image/png',
         ));
+        scope.fingerprint = ['feedback_${uuid.v1()}'];
       },
     );
     await realHub.captureUserFeedback(SentryUserFeedback(
