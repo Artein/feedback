@@ -8,7 +8,7 @@ export 'package:feedback/feedback.dart';
 
 /// Extension on [FeedbackController] in order to make
 /// it easier to call [showAndUploadToSentry].
-extension SentryFeedback on FeedbackController {
+extension SentryFeedbackX on FeedbackController {
   /// This method opens the feedback ui and the users feedback
   /// is uploaded to Sentry after the user submitted his feedback.
   /// [name] and [email] are optional. They are shown in the Sentry.io ui.s
@@ -56,20 +56,25 @@ OnFeedbackCallback sendToSentry({
 
   return (UserFeedback feedback) async {
     var uuid = Uuid();
-    final id = await realHub.captureMessage(feedback.text, withScope: (scope) {
-      scope.addAttachment(SentryAttachment.fromUint8List(
-        feedback.screenshot,
-        'screenshot.png',
-        contentType: 'image/png',
-      ));
+    await realHub.captureFeedback(
+        SentryFeedback(
+          contactEmail: email,
+          name: name,
+          message: feedback.text,
+        ),
+        hint: Hint.withScreenshot(
+          SentryAttachment.fromUint8List(
+            feedback.screenshot,
+            'screenshot.png',
+            contentType: 'image/png',
+          ),
+        ), withScope: (scope) {
+      scope.setContexts(
+        "user_feedback",
+        feedback.extra,
+      );
       scope.fingerprint = ['feedback_${uuid.v1()}'];
     });
-    await realHub.captureUserFeedback(SentryUserFeedback(
-      eventId: id,
-      email: email,
-      name: name,
-      comments: feedback.text + '\n${feedback.extra.toString()}',
-    ));
   };
 }
 
@@ -91,6 +96,10 @@ OnFeedbackCallback sendToSentryWithException({
       exception,
       stackTrace: stackTrace,
       withScope: (scope) {
+        scope.setContexts(
+          "user_feedback",
+          feedback.extra,
+        );
         scope.addAttachment(SentryAttachment.fromUint8List(
           feedback.screenshot,
           'screenshot.png',
@@ -99,11 +108,11 @@ OnFeedbackCallback sendToSentryWithException({
         scope.fingerprint = ['feedback_${uuid.v1()}'];
       },
     );
-    await realHub.captureUserFeedback(SentryUserFeedback(
-      eventId: id,
-      email: email,
+    await realHub.captureFeedback(SentryFeedback(
+      associatedEventId: id,
+      contactEmail: email,
       name: name,
-      comments: feedback.text + '\n${feedback.extra.toString()}',
+      message: feedback.text,
     ));
   };
 }

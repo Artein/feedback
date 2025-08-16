@@ -4,11 +4,10 @@
 
 <p align="center">
   <a href="https://pub.dev/packages/feedback"><img src="https://img.shields.io/pub/v/feedback.svg" alt="pub.dev"></a>
-  <a href="https://github.com/ueman/feedback/actions/workflows/feedback.yml"><img src="https://github.com/ueman/feedback/actions/workflows/feedback.yml/badge.svg" alt="feedback workflow"></a>
   <a href="https://codecov.io/gh/ueman/feedback"><img src="https://codecov.io/gh/ueman/feedback/branch/master/graph/badge.svg" alt="code coverage"></a>
   <a href="https://github.com/ueman#sponsor-me"><img src="https://img.shields.io/github/sponsors/ueman" alt="Sponsoring"></a>
   <a href="https://pub.dev/packages/feedback/score"><img src="https://img.shields.io/pub/likes/feedback" alt="likes"></a>
-  <a href="https://pub.dev/packages/feedback/score"><img src="https://img.shields.io/pub/popularity/feedback" alt="popularity"></a>
+  <a href="https://pub.dev/packages/feedback/score"><img src="https://img.shields.io/pub/dm/feedback" alt="monthly downloads"></a>
   <a href="https://pub.dev/packages/feedback/score"><img src="https://img.shields.io/pub/points/feedback" alt="pub points"></a>
 </p>
 
@@ -52,10 +51,11 @@ understand.
 Depending on your use case there are wide variety of solutions.
 These are a couple suggestions:
 
-| Plugin                         | Package                          |
-|--------------------------------|--------------------------------|
-| GitLab Issue                   | [feedback_gitlab](https://pub.dev/packages/feedback_gitlab) |
-| Sentry User Feedback           | [feedback_sentry](https://pub.dev/packages/feedback_sentry) |
+| Plugin                         | Package                                                     | Notes                             |
+|--------------------------------|-------------------------------------------------------------|-----------------------------------|
+| GitLab Issue                   | [feedback_gitlab](https://pub.dev/packages/feedback_gitlab) |                                   |
+| Sentry User Feedback           | [feedback_sentry](https://pub.dev/packages/feedback_sentry) |                                   |
+| GitHub Issue                   | [feedback_github](https://pub.dev/packages/feedback_github) | Uses Firebase Storage for images  |
 
 
 | Target                         | Notes                          |
